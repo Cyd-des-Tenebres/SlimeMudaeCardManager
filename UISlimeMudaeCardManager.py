@@ -7,7 +7,6 @@ from numpy.random import default_rng as rng
 def create_list_cards(cards):
     list_cards = []
     list_str_cards = cards.split("\n")
-    print(list_str_cards)
     for k in list_str_cards:
         param_card = k.split(" · ")
         id = param_card[1]
