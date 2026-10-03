@@ -7,8 +7,6 @@ from numpy.random import default_rng as rng
 def create_list_cards(cards):
     list_cards = []
     list_str_cards = cards.split("\n")
-    list_str_cards.pop(0)
-    list_str_cards.pop(-1)
     print(list_str_cards)
     for k in list_str_cards:
         param_card = k.split(" · ")
