@@ -47,7 +47,12 @@ if uploaded_file is not None:
     list_cards = create_list_cards(cards)
     df_cards = pd.DataFrame(list_cards, columns=["ID", "Condition", "Name", "Level", "Rarity"])
 
-    col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
+    df_cards["Number of duplicate"] = 0
+    dict_nbr_duplicate = nbr_duplicate(cards, list_characters)
+    for k in list_characters:
+        df_cards.loc[df_cards["Name"].str.contains(k), "Number of duplicate"] = dict_nbr_duplicate[k]
+
+    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
 
     with col1:
         sort_condition = st.text_input("Condition")
@@ -57,6 +62,8 @@ if uploaded_file is not None:
         sort_level = st.text_input("Level")
     with col4:
         sort_rarity = st.text_input("Rarity")
+    with col5:
+        sort_min_dupli = st.number_input("Min Dupli")
 
     if sort_condition:
         df_cards = df_cards[df_cards["Condition"] == sort_condition]
@@ -66,11 +73,8 @@ if uploaded_file is not None:
         df_cards = df_cards[df_cards["Level"] == sort_level]
     if sort_rarity:
         df_cards = df_cards[df_cards["Rarity"].str.contains(sort_rarity)]
-    
-    df_cards["Number of duplicate"] = 0
-    dict_nbr_duplicate = nbr_duplicate(cards, list_characters)
-    for k in list_characters:
-        df_cards.loc[df_cards["Name"].str.contains(k), "Number of duplicate"] = dict_nbr_duplicate[k]
+    if sort_min_dupli:
+        df_cards = df_cards[df_cards["Number of duplicate"] >= sort_min_dupli]
 
     st.write(f"{len(df_cards)} characters found.")
 
